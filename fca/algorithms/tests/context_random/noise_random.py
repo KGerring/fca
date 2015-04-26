@@ -1,9 +1,10 @@
-from fca import *
+﻿from fca import *
 import random
 from copy import deepcopy
 from sets import Set
+from create_random_context import *
 
-contexts = ['context_chain.cxt', 'context_chain_1.cxt', 'context_chain_enlarged.cxt', 'context_antichain.cxt', 'context_3.cxt', 'context_4.cxt']
+contexts = ['context_random.cxt']
 
 def generate_noise_cxt_type1(context, percentage):
     n = len(context.objects)
@@ -69,39 +70,50 @@ def distance(concept_sys1, concept_sys2, dist_type):
             return 0
         else:
             return 1
-        
-def test(context_paths, dist_type, n):
-    for context_path in context_paths:
-        f = open('result_'+dist_type+'_'+context_path,'w')
-        context = read_cxt(context_path)
+# для каждого уровня шума генерируется новый контекст.
+# нужно ли один контекст для все уровней
+def test(context_paths, dist_type, n, number_of_objects0, number_of_objects, m, dens):
+    f = open('result_'+dist_type+'_'+context_paths[0],'w')
+    result1 = []
+    result2 = []
+    noise_levels = [20] #[3, 5, 8, 10, 15, 20]
+    for i in range(n):
+        context = random_context(number_of_objects, number_of_objects, m, dens)
         c = ConceptLattice(context, builder=norris)
-        for kkk in [3, 5, 8, 10, 15, 20]:
-            result1 = []
-            result2 = []
-            for i in range(n):
-                context1 = generate_noise_cxt_type1(context, kkk)
-                context2 = generate_noise_cxt_type2(context, kkk, 0, 1)
-                c1 = ConceptLattice(context1, builder=norris)
-                c2 = ConceptLattice(context2, builder=norris)
-                c1f = filter_concepts(c1, compute_istability, "abs", len(c1))
-                c2f = filter_concepts(c2, compute_istability, "abs", len(c2))
-                minimal_distance1 = 10000 # поменять мин расстояние
-                minimal_distance2 = 10000
-                for k in range (0,len(c1f)+1):
-                    c1fk = [c1f[j] for j in range(k)]
-                    current_distance = distance(c, c1fk, dist_type)
-                    minimal_distance1 = min(minimal_distance1, current_distance)
-                    if minimal_distance1 == 0:
-                        break
-                for k in range (0,len(c2f)+1):
-                    c2fk = [c2f[j] for j in range(k)]
-                    current_distance = distance(c, c2fk, dist_type)
-                    minimal_distance2 = min(minimal_distance2, current_distance)
-                    if minimal_distance2 == 0:
-                        break
-                
-                result1.append(minimal_distance1)
-                result2.append(minimal_distance2)
-            print context_path, kkk, sum(result1) / float(len(result1)), sum(result2) / float(len(result2))
-            f.write(str(kkk) + ' ' + str(sum(result1) / float(len(result1))) + ' ' + str(sum(result2) / float(len(result2))) + '\n')
-        f.close()
+        #print 'number of concepts: ', len(c)
+        buf1 = []
+        buf2 = []
+        for kkk in noise_levels:
+            context1 = generate_noise_cxt_type1(context, kkk)
+            context2 = generate_noise_cxt_type2(context, kkk, 0, 1) ####
+            c1 = ConceptLattice(context1, builder=norris)
+            c2 = ConceptLattice(context2, builder=norris)
+            c1f = filter_concepts(c1, compute_istability, "abs", len(c1))
+            c2f = filter_concepts(c2, compute_istability, "abs", len(c2))
+            minimal_distance1 = 10000
+            minimal_distance2 = 10000
+            for k in range (0,len(c1f)+1):
+                c1fk = [c1f[j] for j in range(k)]
+                current_distance = distance(c, c1fk, dist_type)
+                minimal_distance1 = min(minimal_distance1, current_distance)
+                if minimal_distance1 == 0:
+                    break
+            for k in range (0,len(c2f)+1):
+                c2fk = [c2f[j] for j in range(k)]
+                current_distance = distance(c, c2fk, dist_type)
+                minimal_distance2 = min(minimal_distance2, current_distance)
+                if minimal_distance2 == 0:
+                    break
+            buf1.append(minimal_distance1)
+            buf2.append(minimal_distance2)
+        result1.append(buf1)
+        result2.append(buf2)
+    for i in range(len(noise_levels)):
+        sum1 = 0
+        sum2 = 0
+        for j in range(n):
+           sum1 += result1[j][i]
+           sum2 += result2[j][i]
+        print context_paths[0], noise_levels[i], sum1 / float(n), sum2 / float(n)
+        f.write(str(noise_levels[i]) + ' ' + str(sum1 / float(n)) + ' ' + str(sum2 / float(n)) + '\n')
+    f.close()

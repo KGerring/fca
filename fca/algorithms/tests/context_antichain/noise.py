@@ -3,7 +3,12 @@ import random
 from copy import deepcopy
 from sets import Set
 
-contexts = ['context_chain.cxt', 'context_chain_1.cxt', 'context_chain_enlarged.cxt', 'context_antichain.cxt', 'context_3.cxt', 'context_4.cxt']
+contexts = [#'context_antichain_300.cxt',
+            #'context_antichain_600.cxt',
+            #'context_antichain_1200.cxt',
+            #'context_antichain_2400.cxt',
+            'context_antichain_4800.cxt',
+            'context_antichain_9600.cxt']
 
 def generate_noise_cxt_type1(context, percentage):
     n = len(context.objects)

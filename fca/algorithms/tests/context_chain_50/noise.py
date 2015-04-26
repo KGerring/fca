@@ -3,7 +3,7 @@ import random
 from copy import deepcopy
 from sets import Set
 
-contexts = ['context_chain.cxt', 'context_chain_1.cxt', 'context_chain_enlarged.cxt', 'context_antichain.cxt', 'context_3.cxt', 'context_4.cxt']
+contexts = ['context_chain_50.cxt', 'context_chain_100.cxt', 'context_chain_200.cxt', 'context_chain_400.cxt', 'context_chain_800.cxt']
 
 def generate_noise_cxt_type1(context, percentage):
     n = len(context.objects)
@@ -35,10 +35,10 @@ def generate_noise_cxt_type2(context, percentage_obj, percentage_attr, k):
     count = y_obj
     context_type2 = deepcopy(context)
     while y_obj != 0:
+        list1 = random.sample(xrange(m), random.randint(1,int(k*m)))
         row = [False]*m
-        for i in range(m):
-            if random.random() < k:
-                row[i] = True
+        for i in list1:
+            row[i] = True
         context_type2.add_object(row, 'Obj_noise ' + str(int(count-y_obj+1)))
         y_obj-=1
     # type2 noise for attributes: 
@@ -75,7 +75,7 @@ def test(context_paths, dist_type, n):
         f = open('result_'+dist_type+'_'+context_path,'w')
         context = read_cxt(context_path)
         c = ConceptLattice(context, builder=norris)
-        for kkk in [3, 5, 8, 10, 15, 20]:
+        for kkk in [5, 10, 20]:
             result1 = []
             result2 = []
             for i in range(n):
@@ -85,8 +85,8 @@ def test(context_paths, dist_type, n):
                 c2 = ConceptLattice(context2, builder=norris)
                 c1f = filter_concepts(c1, compute_istability, "abs", len(c1))
                 c2f = filter_concepts(c2, compute_istability, "abs", len(c2))
-                minimal_distance1 = 10000 # поменять мин расстояние
-                minimal_distance2 = 10000
+                minimal_distance1 = 1
+                minimal_distance2 = 1
                 for k in range (0,len(c1f)+1):
                     c1fk = [c1f[j] for j in range(k)]
                     current_distance = distance(c, c1fk, dist_type)
