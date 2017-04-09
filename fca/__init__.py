@@ -21,3 +21,7 @@ compute_probability, compute_index)
 test= "https://elastic.pushshift.io/reddit/submission/_search/"
 
 test2="https://www.reddit.com/r/redditdev/comments/64cs5u/new_pushshift_api_endpoint_all_reddit_submissions/?st=J1B6T7XK&sh=fc60171f"
+
+test3 = "https://elastic.pushshift.io/reddit/submission/_search/?q="
+
+test4 = "https://elastic.pushshift.io/reddit/submission/_search/?q=created_utc:%3E1483228800&sort=gilded:desc&size=100"
