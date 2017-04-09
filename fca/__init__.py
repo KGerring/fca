@@ -17,3 +17,5 @@ from fca.readwrite import (read_txt, read_cxt, write_cxt, write_dot,
 from fca.algorithms.filtering import (filter_concepts, compute_estability,
 compute_istability, compute_separation_index, 
 compute_probability, compute_index)
+
+test= "https://elastic.pushshift.io/reddit/submission/_search/"
