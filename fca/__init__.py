@@ -19,3 +19,5 @@ compute_istability, compute_separation_index,
 compute_probability, compute_index)
 
 test= "https://elastic.pushshift.io/reddit/submission/_search/"
+
+test2="https://www.reddit.com/r/redditdev/comments/64cs5u/new_pushshift_api_endpoint_all_reddit_submissions/?st=J1B6T7XK&sh=fc60171f"
