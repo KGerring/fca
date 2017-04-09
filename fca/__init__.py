@@ -25,3 +25,5 @@ test2="https://www.reddit.com/r/redditdev/comments/64cs5u/new_pushshift_api_endp
 test3 = "https://elastic.pushshift.io/reddit/submission/_search/?q="
 
 test4 = "https://elastic.pushshift.io/reddit/submission/_search/?q=created_utc:%3E1483228800&sort=gilded:desc&size=100"
+
+k1788 = "https://elastic.pushshift.io/reddit/submission/_search/?q=author:k1788"
